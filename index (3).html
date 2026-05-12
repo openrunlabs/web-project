@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>더 오픈런 AI — 외식업 자영업자의 경영 자율주행</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+<style>
+:root {
+  --navy-900:#060D1A; --navy-800:#0A1628; --navy-700:#0F2040;
+  --navy-600:#162C55; --navy-500:#1E3A6E;
+  --orange:#E85D24; --orange-l:#FF7A42; --orange-d:rgba(232,93,36,0.12);
+  --white:#FFFFFF; --tp:#F0F4FF; --ts:#94A3B8; --tm:#64748B;
+  --bd:rgba(255,255,255,0.08); --bdh:rgba(255,255,255,0.18);
+  --cg:rgba(255,255,255,0.04); --cgh:rgba(255,255,255,0.07);
+  --rsm:10px; --rmd:14px; --rlg:20px; --rxl:28px;
+  /* Font scale — min 17px */
+  --fxs:17px; --fsm:19px; --fmd:21px; --flg:24px;
+  --fxl:28px; --f2xl:34px; --f3xl:42px; --f4xl:54px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif;
+  background:var(--navy-800);color:var(--tp);line-height:1.7;
+  -webkit-font-smoothing:antialiased;font-size:var(--fmd)}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,22,40,0.94);
+  backdrop-filter:blur(24px);border-bottom:1px solid var(--bd);
+  padding:0 40px;height:70px;display:flex;align-items:center;
+  justify-content:space-between;gap:20px}
+.nlogo{display:flex;align-items:baseline;gap:10px;cursor:pointer;flex-shrink:0}
+.nlogo-m{font-size:var(--flg);font-weight:800;color:var(--white);letter-spacing:-0.5px}
+.nlogo-m span{color:var(--orange)}
+.nlogo-s{font-size:var(--fxs);color:var(--tm)}
+.nlinks{display:flex;align-items:center;gap:4px}
+.nlink{padding:8px 18px;font-size:var(--fsm);color:var(--ts);cursor:pointer;
+  border-radius:var(--rsm);transition:all .2s;border:1px solid transparent;font-weight:500}
+.nlink:hover{color:var(--white);background:rgba(255,255,255,0.07)}
+.nlink.active{color:var(--white);font-weight:700;background:rgba(255,255,255,0.09);border-color:var(--bdh)}
+.ncta{padding:10px 24px;background:var(--orange);color:var(--white);font-size:var(--fsm);
+  font-weight:700;border-radius:var(--rsm);cursor:pointer;transition:all .2s;
+  flex-shrink:0;text-decoration:none;display:inline-block}
+.ncta:hover{background:var(--orange-l);transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,93,36,0.4)}
+.nham{display:none;cursor:pointer;flex-direction:column;gap:6px}
+.nham span{width:24px;height:2px;background:var(--ts);border-radius:2px;transition:.3s}
+.mnav{display:none;position:fixed;top:70px;left:0;right:0;
+  background:rgba(10,22,40,0.98);border-bottom:1px solid var(--bd);
+  padding:16px;z-index:99;flex-direction:column;gap:4px}
+.mnav.open{display:flex}
+/* PAGES */
+.page{display:none;animation:fi .3s ease}
+.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* LAYOUT */
+.sec{padding:110px 0}
+.inner{max-width:1120px;margin:0 auto;padding:0 48px}
+/* TYPE */
+.eyebrow{font-size:var(--fxs);font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--orange);margin-bottom:20px}
+h1{font-size:clamp(40px,6.5vw,72px);font-weight:900;line-height:1.1;letter-spacing:-1.5px}
+h2{font-size:var(--f3xl);font-weight:800;line-height:1.18;letter-spacing:-0.8px}
+h3{font-size:var(--fxl);font-weight:700;line-height:1.28}
+h4{font-size:var(--flg);font-weight:700}
+h5{font-size:var(--fmd);font-weight:600}
+p{font-size:var(--fmd);line-height:1.75;color:var(--ts)}
+.torg{color:var(--orange)}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;
+  border-radius:var(--rsm);font-size:var(--fsm);font-weight:700;
+  cursor:pointer;transition:all .2s;border:none;text-decoration:none}
+.btnp{background:var(--orange);color:var(--white)}
+.btnp:hover{background:var(--orange-l);transform:translateY(-2px);box-shadow:0 10px 28px rgba(232,93,36,0.38)}
+.btno{background:transparent;color:var(--tp);border:1.5px solid var(--bdh)}
+.btno:hover{background:rgba(255,255,255,0.07)}
+.brow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+/* CARDS */
+.card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rlg);padding:40px;transition:all .22s}
+.card:hover{background:var(--cgh);border-color:var(--bdh)}
+.cacc{background:rgba(232,93,36,0.08);border:1px solid rgba(232,93,36,0.28);border-radius:var(--rlg);padding:40px}
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px}
+/* UTILS */
+.div{height:1px;background:var(--bd);margin:64px 0}
+.slabel{font-size:var(--fxs);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--tm);display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--bd)}
+.sintro{margin-bottom:64px}
+.sintro h2{margin-bottom:20px}
+.sintro p{font-size:var(--flg);max-width:580px}
+.tag{display:inline-flex;align-items:center;padding:7px 18px;border-radius:28px;
+  font-size:var(--fxs);font-weight:700;letter-spacing:.3px}
+.tago{background:var(--orange-d);color:var(--orange);border:1px solid rgba(232,93,36,0.35)}
+.qblock{font-size:var(--fxl);font-weight:600;line-height:1.65;
+  border-left:4px solid var(--orange);padding-left:30px;margin:48px 0}
+/* KPI STRIP */
+.kpi-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--bd);border-radius:var(--rlg);overflow:hidden;margin:64px 0}
+.kpi-i{background:var(--navy-700);padding:44px;text-align:center}
+.kpi-n{font-size:var(--f4xl);font-weight:900;color:var(--orange);line-height:1;margin-bottom:12px}
+.kpi-l{font-size:var(--fsm);color:var(--ts)}
+/* HERO */
+.hero{padding:130px 0 110px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:700px;height:700px;
+  background:radial-gradient(circle,rgba(232,93,36,0.14) 0%,transparent 68%);pointer-events:none}
+.hero-tag{margin-bottom:30px}
+.hero h1{margin-bottom:28px}
+.hero-sub{font-size:var(--fxl);color:var(--ts);line-height:1.7;margin-bottom:52px;max-width:560px}
+.hero-note{font-size:var(--fxs);color:var(--tm);margin-top:24px}
+
+/* ── HOME: PROBLEM VISUAL ── */
+.prob-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin:56px 0}
+.prob-col{display:flex;flex-direction:column;align-items:center;padding:52px 36px;
+  text-align:center;border:1px solid var(--bd);background:var(--cg);
+  transition:all .25s;position:relative}
+.prob-col:first-child{border-radius:var(--rlg) 0 0 var(--rlg)}
+.prob-col:last-child{border-radius:0 var(--rlg) var(--rlg) 0}
+.prob-col:not(:first-child){border-left:none}
+.prob-col:hover{background:var(--cgh)}
+.prob-col::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:4px 4px 0 0}
+.prob-col.pre::before{background:linear-gradient(90deg,#F59E0B,#FCD34D)}
+.prob-col.now::before{background:linear-gradient(90deg,#EF4444,#F87171)}
+.prob-col.com::before{background:linear-gradient(90deg,#8B5CF6,#A78BFA)}
+.prob-emoji{font-size:72px;margin-bottom:24px;line-height:1}
+.prob-tag{font-size:var(--fxs);font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:16px;padding:6px 18px;border-radius:20px}
+.pre .prob-tag{background:rgba(245,158,11,0.15);color:#F59E0B}
+.now .prob-tag{background:rgba(239,68,68,0.12);color:#F87171}
+.com .prob-tag{background:rgba(139,92,246,0.12);color:#A78BFA}
+.prob-title{font-size:var(--flg);font-weight:800;margin-bottom:18px;line-height:1.3}
+.prob-body{font-size:var(--fsm);color:var(--ts);line-height:1.75}
+
+/* STAT */
+.stat-big{background:linear-gradient(135deg,var(--navy-700),var(--navy-600));
+  border:1px solid rgba(232,93,36,0.22);border-radius:var(--rxl);
+  padding:80px 60px;text-align:center;margin:64px 0;position:relative;overflow:hidden}
+.stat-big::after{content:'';position:absolute;bottom:-100px;right:-100px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(232,93,36,0.18) 0%,transparent 68%);pointer-events:none}
+.snum{font-size:clamp(64px,11vw,110px);font-weight:900;color:var(--orange);line-height:1;margin-bottom:20px}
+.ssub{font-size:var(--flg);color:var(--ts);line-height:1.65}
+
+/* FRAG */
+.frag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.frag-card{background:var(--navy-700);border:1px solid var(--bd);
+  border-radius:var(--rmd);padding:36px 28px;text-align:center}
+.frag-icon{font-size:52px;margin-bottom:20px}
+.frag-en{font-size:var(--fxs);font-weight:700;color:var(--orange);letter-spacing:.5px;margin-bottom:10px}
+.frag-kr{font-size:var(--flg);font-weight:800;margin-bottom:14px}
+.frag-desc{font-size:var(--fsm);color:var(--ts);line-height:1.7}
+
+/* ── HOME: SOLUTION DIAGRAM ── */
+.sol-diag{display:grid;grid-template-columns:1fr 100px 1fr;gap:0;align-items:stretch;margin:56px 0}
+.sol-half{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rlg);padding:48px 40px}
+.sol-half.ai{border-color:rgba(59,130,246,0.35)}
+.sol-half.coach{border-color:rgba(232,93,36,0.35)}
+.sol-center{display:flex;align-items:center;justify-content:center;position:relative}
+.sol-center::before{content:'';position:absolute;top:50%;left:50%;
+  width:60px;height:60px;border-radius:50%;
+  background:var(--orange-d);border:2px solid var(--orange);transform:translate(-50%,-50%)}
+.sol-ci{position:relative;z-index:1;font-size:26px}
+.sol-icon{font-size:56px;margin-bottom:24px}
+.sol-half h4{font-size:var(--fxl);margin-bottom:24px}
+.sol-half ul{list-style:none;display:flex;flex-direction:column;gap:16px}
+.sol-half ul li{font-size:var(--fsm);color:var(--ts);
+  padding:16px 20px 16px 52px;position:relative;
+  background:rgba(255,255,255,0.04);border-radius:var(--rsm);border:1px solid var(--bd)}
+.sol-half ul li .li{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:22px}
+
+/* JOURNEY / PROCESS */
+.proc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:36px 0}
+.proc-step{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rsm);
+  padding:14px 24px;font-size:var(--fsm);font-weight:700}
+.proc-arr{color:var(--orange);font-size:24px;font-weight:700}
+
+/* SCENARIO */
+.scene{background:var(--orange-d);border:1px solid rgba(232,93,36,0.3);
+  border-radius:var(--rlg);padding:40px 44px;margin:48px 0}
+.scene-msg{font-size:var(--flg);font-weight:700;line-height:1.6;margin-bottom:24px}
+.syes{padding:12px 28px;background:var(--orange);color:#fff;border-radius:8px;
+  font-size:var(--fsm);font-weight:800}
+.sno{padding:12px 28px;background:rgba(255,255,255,0.08);color:var(--ts);
+  border-radius:8px;font-size:var(--fsm);border:1px solid var(--bd)}
+.snote{font-size:var(--fxs);color:var(--tm)}
+
+/* PRODUCT LAYER */
+.lbadge{font-size:var(--fxs);font-weight:700;padding:6px 14px;border-radius:20px;letter-spacing:.5px}
+.lsaas{background:rgba(59,130,246,0.15);color:#60A5FA;border:1px solid rgba(59,130,246,0.28)}
+.lagent{background:rgba(232,93,36,0.15);color:var(--orange);border:1px solid rgba(232,93,36,0.28)}
+.prod-hd{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.prod-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rmd);
+  padding:32px;transition:all .2s}
+.prod-card:hover{background:var(--cgh);border-color:var(--bdh);transform:translateY(-3px)}
+.prod-card .picon{font-size:40px;margin-bottom:16px}
+.prod-card h4{font-size:var(--flg);margin-bottom:12px}
+.prod-card p{font-size:var(--fsm);color:var(--ts);line-height:1.75}
+.prod-card .hi{color:var(--orange);font-weight:700}
+
+/* ARCH */
+.arch-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rmd);padding:32px}
+.arch-emoji{font-size:40px;margin-bottom:18px}
+.arch-card h4{font-size:var(--flg);margin-bottom:10px}
+.arch-card p{font-size:var(--fsm);color:var(--ts);line-height:1.65}
+
+/* JOURNEY VERTICAL */
+.journey{display:flex;flex-direction:column;gap:0;margin-top:48px;position:relative}
+.journey::before{content:'';position:absolute;left:23px;top:0;bottom:0;
+  width:2px;background:var(--bd)}
+.jstep{display:flex;gap:28px;align-items:flex-start;padding:30px 0}
+.jdot{width:46px;height:46px;border-radius:50%;background:var(--navy-700);
+  border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;
+  font-size:var(--fxs);font-weight:800;color:var(--tm);flex-shrink:0;position:relative;z-index:1}
+.jdot.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.jlabel{font-size:var(--fxs);font-weight:700;letter-spacing:1px;color:var(--orange);margin-bottom:8px}
+.jtitle{font-size:var(--flg);font-weight:700;margin-bottom:10px}
+.jdesc{font-size:var(--fsm);color:var(--ts);line-height:1.75}
+
+/* TAM */
+.tam-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.tam-card{border-radius:var(--rlg);padding:42px 32px}
+.tam-card.t{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.22)}
+.tam-card.s{background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.22)}
+.tam-card.o{background:rgba(232,93,36,0.08);border:1px solid rgba(232,93,36,0.22)}
+.tam-label{font-size:var(--fxs);font-weight:800;letter-spacing:1.5px;margin-bottom:14px}
+.tam-card.t .tam-label{color:#60A5FA}
+.tam-card.s .tam-label{color:#4ADE80}
+.tam-card.o .tam-label{color:var(--orange)}
+.tam-val{font-size:var(--f2xl);font-weight:900;margin-bottom:12px}
+.tam-card.t .tam-val{color:#60A5FA}
+.tam-card.s .tam-val{color:#4ADE80}
+.tam-card.o .tam-val{color:var(--orange)}
+.tam-desc{font-size:var(--fsm);color:var(--ts);line-height:1.7}
+
+/* IR VISION */
+.ir-vision{background:linear-gradient(135deg,var(--navy-700),var(--navy-600));
+  border:1px solid rgba(232,93,36,0.2);border-radius:var(--rxl);
+  padding:72px 60px;margin:0 0 72px;text-align:center}
+.ir-vision h3{font-size:var(--f2xl);margin-bottom:20px}
+.ir-vision p{font-size:var(--flg);color:var(--ts);max-width:680px;margin:0 auto;line-height:1.75}
+.funnel-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;
+  background:var(--bd);border-radius:var(--rmd);overflow:hidden;margin-top:48px}
+.fstep{background:var(--navy-700);padding:36px 28px;text-align:center}
+.ficon{font-size:44px;margin-bottom:16px}
+.fstep h5{font-size:var(--fmd);margin-bottom:10px}
+.fstep p{font-size:var(--fsm)}
+
+/* GROWTH */
+.grow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.grow-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rlg);
+  padding:36px 24px;text-align:center;position:relative;overflow:hidden;transition:all .22s}
+.grow-card:hover{border-color:rgba(232,93,36,0.3);transform:translateY(-3px)}
+.grow-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.grow-card:nth-child(1)::before{background:#60A5FA}
+.grow-card:nth-child(2)::before{background:#4ADE80}
+.grow-card:nth-child(3)::before{background:var(--orange)}
+.grow-card:nth-child(4)::before{background:#A78BFA}
+.gyear{font-size:var(--fxs);font-weight:700;letter-spacing:1px;color:var(--tm);margin-bottom:10px}
+.gstep{font-size:var(--fxs);font-weight:700;color:var(--orange);margin-bottom:16px}
+.gnum{font-size:var(--f3xl);font-weight:900;margin-bottom:8px}
+.grow-card:nth-child(1) .gnum{color:#60A5FA}
+.grow-card:nth-child(2) .gnum{color:#4ADE80}
+.grow-card:nth-child(3) .gnum{color:var(--orange)}
+.grow-card:nth-child(4) .gnum{color:#A78BFA}
+.gunit{font-size:var(--fsm);color:var(--ts);margin-bottom:10px}
+.gdesc{font-size:var(--fxs);color:var(--tm);line-height:1.6}
+
+/* PATENT */
+.pat-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.pat-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rmd);
+  padding:26px;display:flex;gap:18px;align-items:flex-start}
+.pat-badge{background:rgba(59,130,246,0.15);color:#60A5FA;
+  border:1px solid rgba(59,130,246,0.28);border-radius:8px;
+  padding:6px 14px;font-size:var(--fxs);font-weight:800;white-space:nowrap;flex-shrink:0}
+.pat-card p{font-size:var(--fsm);color:var(--ts);line-height:1.65}
+
+/* IR CTA */
+.ircta{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ircta-card{border-radius:var(--rlg);padding:40px}
+.ircta-card.bl{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.22)}
+.ircta-card.gr{background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.22)}
+.ircta-card h4{font-size:var(--flg);margin-bottom:14px}
+.ircta-card.bl h4{color:#60A5FA}
+.ircta-card.gr h4{color:#4ADE80}
+.ircta-card p{font-size:var(--fsm);margin-bottom:24px;color:var(--ts)}
+
+/* REVENUE */
+.rev-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.rev-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rmd);
+  padding:28px 18px;text-align:center;transition:all .2s}
+.rev-card:hover{border-color:rgba(232,93,36,0.3)}
+.rnum{font-size:var(--f2xl);font-weight:900;color:var(--orange);margin-bottom:12px}
+.rtitle{font-size:var(--fmd);font-weight:700;margin-bottom:10px}
+.rsub{font-size:var(--fxs);color:var(--ts);line-height:1.6}
+.rnote{font-size:var(--fxs);color:#4ADE80;margin-top:10px;font-weight:700}
+
+/* TALENT */
+.tal-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.tal-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rlg);
+  padding:40px;transition:all .22s}
+.tal-card:hover{border-color:rgba(232,93,36,0.3);background:var(--cgh)}
+.tal-emoji{font-size:56px;margin-bottom:22px}
+.tal-card h3{font-size:var(--fxl);margin-bottom:14px}
+.tal-card p{font-size:var(--fsm);color:var(--ts);line-height:1.75}
+
+/* PHILOSOPHY */
+.phil{background:linear-gradient(135deg,rgba(232,93,36,0.1),rgba(232,93,36,0.04));
+  border:1px solid rgba(232,93,36,0.28);border-radius:var(--rxl);
+  padding:80px 60px;text-align:center;margin:48px 0}
+.phil-icon{font-size:80px;margin-bottom:32px}
+.phil h2{font-size:var(--f2xl);margin-bottom:20px}
+.phil p{font-size:var(--flg);color:var(--ts);max-width:660px;margin:0 auto;line-height:1.8}
+
+/* JOB */
+.job-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.job-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rmd);
+  padding:30px 36px;display:flex;align-items:center;justify-content:space-between;transition:all .2s}
+.job-card:hover{border-color:rgba(232,93,36,0.3)}
+.job-card h4{font-size:var(--fmd);margin-bottom:6px}
+.job-card p{font-size:var(--fsm);color:var(--ts)}
+.jarrow{font-size:26px;color:var(--orange)}
+
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+.team-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rlg);padding:40px}
+.tav{width:64px;height:64px;border-radius:50%;
+  background:linear-gradient(135deg,var(--navy-500),var(--orange));
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#fff;margin-bottom:22px}
+.team-card h3{font-size:var(--fxl);margin-bottom:6px}
+.trole{font-size:var(--fsm);color:var(--orange);font-weight:700;margin-bottom:18px}
+.team-card p{font-size:var(--fsm);color:var(--ts);line-height:1.75}
+.tnote{font-size:var(--fxs);color:var(--tm);margin-top:14px;font-style:italic}
+
+/* ROADMAP */
+.rm-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:48px}
+.rm-card{background:var(--cg);border:1px solid var(--bd);border-radius:var(--rlg);
+  padding:40px;position:relative;overflow:hidden}
+.rm-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.rm-card:nth-child(1)::before{background:#60A5FA}
+.rm-card:nth-child(2)::before{background:#4ADE80}
+.rm-card:nth-child(3)::before{background:var(--orange)}
+.rm-icon{font-size:40px;margin-bottom:18px}
+.rm-year{font-size:var(--fxs);font-weight:700;letter-spacing:1px;color:var(--tm);margin-bottom:8px}
+.rm-phase{font-size:var(--fmd);font-weight:700;color:var(--orange);margin-bottom:18px}
+.rm-card p{font-size:var(--fsm);color:var(--ts);line-height:1.75}
+
+/* PAGE HERO */
+.phero{background:linear-gradient(180deg,var(--navy-700) 0%,var(--navy-800) 100%);
+  padding:88px 0 72px;border-bottom:1px solid var(--bd)}
+.phero h2{margin-bottom:18px}
+.phero .psub{font-size:var(--flg);color:var(--ts);max-width:580px}
+
+/* FOOTER */
+footer{background:var(--navy-900);border-top:1px solid var(--bd);padding:80px 48px 48px}
+.fi{max-width:1120px;margin:0 auto}
+.ftop{display:flex;justify-content:space-between;align-items:flex-start;gap:52px;margin-bottom:64px}
+.fbrand h3{font-size:var(--fxl);font-weight:900;margin-bottom:10px}
+.fbrand p{font-size:var(--fsm);color:var(--tm);line-height:1.65;max-width:310px}
+.femail{display:inline-block;margin-top:16px;font-size:var(--fsm);
+  color:var(--orange);font-weight:600;text-decoration:none}
+.femail:hover{color:var(--orange-l)}
+.flinks{display:flex;gap:64px}
+.fcol h5{font-size:var(--fxs);font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--tm);margin-bottom:22px}
+.fcol ul{list-style:none}
+.fcol ul li{margin-bottom:14px}
+.fcol ul li a{font-size:var(--fsm);color:var(--ts);text-decoration:none;transition:color .2s}
+.fcol ul li a:hover{color:var(--white)}
+.fbot{display:flex;justify-content:space-between;align-items:center;
+  padding-top:36px;border-top:1px solid var(--bd)}
+.fbot p{font-size:var(--fxs);color:var(--tm)}
+.fslogan{font-size:var(--fxs);color:var(--tm);font-style:italic}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .g3,.tam-grid,.rm-grid,.team-grid,.frag-grid{grid-template-columns:1fr 1fr}
+  .rev-grid,.grow-grid{grid-template-columns:1fr 1fr}
+  .sol-diag{grid-template-columns:1fr}
+  .sol-center{display:none}
+  .prob-wrap{grid-template-columns:1fr}
+  .prob-col:first-child{border-radius:var(--rlg) var(--rlg) 0 0}
+  .prob-col:last-child{border-radius:0 0 var(--rlg) var(--rlg)}
+  .prob-col:not(:first-child){border-left:1px solid var(--bd);border-top:none}
+  .funnel-row{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .nlinks{display:none}
+  .nham{display:flex}
+  .inner{padding:0 24px}
+  .g2,.tal-grid,.job-grid,.pat-grid,.ircta,.team-grid,.rm-grid{grid-template-columns:1fr}
+  .kpi-wrap{grid-template-columns:1fr}
+  .frag-grid{grid-template-columns:1fr}
+  .ftop{flex-direction:column}
+  .flinks{flex-direction:column;gap:36px}
+  .sec,.hero{padding:88px 0}
+  .phil,.ir-vision{padding:56px 28px}
+  .grow-grid{grid-template-columns:1fr 1fr}
+  .stat-big{padding:64px 36px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nlogo" onclick="gp('home')">
+    <span class="nlogo-m">더 오픈런 <span>AI</span></span>
+    <span class="nlogo-s">OpenRun Labs</span>
+  </div>
+  <div class="nlinks">
+    <div class="nlink active" onclick="gp('home')">HOME</div>
+    <div class="nlink" onclick="gp('about')">회사소개</div>
+    <div class="nlink" onclick="gp('solution')">솔루션</div>
+    <div class="nlink" onclick="gp('ir')">IR</div>
+    <div class="nlink" onclick="gp('recruit')">채용</div>
+  </div>
+  <a class="ncta" href="mailto:openrunlabs365@gmail.com">AI 무료 진단</a>
+  <div class="nham" onclick="tm()" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mnav" id="mn">
+  <div class="nlink" onclick="gp('home');cm()">HOME</div>
+  <div class="nlink" onclick="gp('about');cm()">회사소개</div>
+  <div class="nlink" onclick="gp('solution');cm()">솔루션</div>
+  <div class="nlink" onclick="gp('ir');cm()">IR</div>
+  <div class="nlink" onclick="gp('recruit');cm()">채용</div>
+</div>
+
+<!-- ████████  HOME  ████████ -->
+<div id="page-home" class="page active">
+
+  <div class="hero">
+    <div class="inner">
+      <div class="hero-tag"><span class="tag tago">Success is Lo-G &nbsp;·&nbsp; 성공은 운이 아니라 논리다</span></div>
+      <h1>AI가 진단하고,<br><span class="torg">다이닝 코치</span>가<br>신뢰를 완성한다</h1>
+      <p class="hero-sub">대한민국 60만 외식업 자영업자의 장사를<br>예측 가능한 데이터 자산으로 바꿉니다.</p>
+      <div class="brow">
+        <a class="btn btnp" href="mailto:openrunlabs365@gmail.com">AI 매장 무료 진단 받기</a>
+        <div class="btn btno" onclick="gp('ir')">IR 자료 요청</div>
+      </div>
+      <p class="hero-note">모든 문의·진단·파트너십은 이메일로 진행합니다 &nbsp;·&nbsp; openrunlabs365@gmail.com</p>
+    </div>
+  </div>
+
+  <div class="inner">
+    <div class="kpi-wrap">
+      <div class="kpi-i"><div class="kpi-n">60만</div><div class="kpi-l">외식업 자영업자 타깃 시장</div></div>
+      <div class="kpi-i"><div class="kpi-n">특허 4종</div><div class="kpi-l">비즈니스모델 특허 출원</div></div>
+      <div class="kpi-i"><div class="kpi-n">R&amp;D</div><div class="kpi-l">연구개발 전담부서 설립</div></div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <div class="sec">
+    <div class="inner">
+      <div class="slabel">문제 인식</div>
+      <div class="sintro">
+        <h2>외식업 자영업자는<br>매일 같은 문제를 반복한다</h2>
+        <p>운에 맡기는 창업, 노동에 묻히는 운영, 사라지는 자산 가치 —<br>이 세 가지가 자영업 실패의 근본 원인입니다.</p>
+      </div>
+
+      <div class="prob-wrap">
+        <div class="prob-col pre">
+          <div class="prob-emoji">🎲</div>
+          <div class="prob-tag">01 · 예비창업자</div>
+          <div class="prob-title">설계도 없는<br>도박 같은 창업</div>
+          <div class="prob-body">데이터 없이 '느낌'과 유행에 의존해 소중한 자본 투입. 왜 망하는지도 모른 채 폐업하는 악순환이 반복됩니다.</div>
+        </div>
+        <div class="prob-col now">
+          <div class="prob-emoji">⏰</div>
+          <div class="prob-tag">02 · 현재 운영자</div>
+          <div class="prob-title">노동에 묻혀<br>사라지는 자산</div>
+          <div class="prob-body">12시간 이상 매장에 매몰. 마케팅·정산·물류가 파편화되어 매일 쌓이는 데이터는 기록 없이 증발합니다.</div>
+        </div>
+        <div class="prob-col com">
+          <div class="prob-emoji">📉</div>
+          <div class="prob-tag">03 · 공통 문제</div>
+          <div class="prob-title">AX 전환의<br>기회 박탈</div>
+          <div class="prob-body">대형 프랜차이즈와 기술 격차 심화. 본사 지원 없는 개인 자영업자는 디지털 경쟁에서 고립됩니다.</div>
+        </div>
+      </div>
+
+      <div class="stat-big">
+        <div class="snum">60만 명</div>
+        <div class="ssub">대한민국 외식업 자영업자<br>앱은 늘어났지만, 결국 분석과 판단은 여전히 사장님의 몫입니다.</div>
+      </div>
+
+      <div class="slabel">3가지 구조적 문제</div>
+      <div class="frag-grid">
+        <div class="frag-card">
+          <div class="frag-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="30" width="8" height="12" rx="2" fill="#E85D24" opacity=".9"/><rect x="20" y="20" width="8" height="22" rx="2" fill="#E85D24" opacity=".6"/><rect x="34" y="10" width="8" height="32" rx="2" fill="#E85D24" opacity=".35"/><line x1="6" y1="6" x2="42" y2="6" stroke="#94A3B8" stroke-width="2" stroke-dasharray="4 4"/></svg></div>
+          <div class="frag-en">Fragmentation</div>
+          <div class="frag-kr">파편화</div>
+          <div class="frag-desc">마케팅·운영·정산 데이터가 단절되어 전체 그림을 볼 수 없습니다.</div>
+        </div>
+        <div class="frag-card">
+          <div class="frag-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="16" stroke="#EF4444" stroke-width="2.5" stroke-dasharray="5 3"/><path d="M16 24 Q20 16 24 20 Q28 24 32 18" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="24" cy="24" r="3" fill="#EF4444"/><line x1="24" y1="6" x2="24" y2="10" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="38" x2="24" y2="42" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/><text x="24" y="44" text-anchor="middle" font-size="0">분석 없음</text></svg></div>
+          <div class="frag-en">Read-only</div>
+          <div class="frag-kr">분석 없는 대시보드</div>
+          <div class="frag-desc">데이터가 흐르지 않고 단순 나열 — 실행으로 연결되지 않습니다.</div>
+        </div>
+        <div class="frag-card">
+          <div class="frag-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="17" stroke="#A78BFA" stroke-width="2.5"/><path d="M24 14 L24 26 L32 32" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="24" r="2" fill="#A78BFA"/></svg></div>
+          <div class="frag-en">Learning Cost</div>
+          <div class="frag-kr">학습 비용</div>
+          <div class="frag-desc">차트 해석과 대안 찾기가 고스란히 사장님의 몫으로 전가됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOLUTION DIAGRAM -->
+  <div class="sec" style="padding-top:0">
+    <div class="inner">
+      <div class="slabel">더 오픈런 AI의 해답</div>
+      <div class="sintro">
+        <h2>AI가 판단하고,<br>코치가 신뢰를 완성한다</h2>
+        <p>"외식업에서 AI만으로는 절대 충분하지 않습니다.<br>사람이 옆에서 같이 봐줄 때 비로소 데이터를 신뢰합니다."</p>
+      </div>
+
+      <div class="sol-diag">
+        <div class="sol-half ai">
+          <div style="font-size:var(--fxs);font-weight:700;letter-spacing:1px;color:#60A5FA;margin-bottom:20px;text-transform:uppercase">AI 엔진</div>
+          <h4>Dining Logic 1.0</h4>
+          <ul>
+            <li>로지 스캔 (MRI 정밀 진단)</li>
+            <li>AI 인사이트 (일일 트렌드 분석)</li>
+            <li>Dining Logic 1.0 (SaaS + AI 에이전트)</li>
+            <li>오픈런 스코어 (신용 자산화)</li>
+          </ul>
+        </div>
+        <div class="sol-center"><div class="sol-ci">+</div></div>
+        <div class="sol-half coach">
+          <div style="font-size:var(--fxs);font-weight:700;letter-spacing:1px;color:var(--orange);margin-bottom:20px;text-transform:uppercase">현장 인간</div>
+          <h4>다이닝 코치</h4>
+          <ul>
+            <li>현장 방문 (대면 진단)</li>
+            <li>신뢰 관계 (설득·공감)</li>
+            <li>함께 실행 (첫 성공 경험)</li>
+            <li>장기 코칭 (월 1회 체크인)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="slabel" style="margin-top:64px">고객 여정</div>
+      <div class="proc-row">
+        <div class="proc-step">① AI 무료 진단</div><div class="proc-arr">→</div>
+        <div class="proc-step">② 코치 방문</div><div class="proc-arr">→</div>
+        <div class="proc-step">③ 첫 성공 경험</div><div class="proc-arr">→</div>
+        <div class="proc-step">④ 구독 전환</div><div class="proc-arr">→</div>
+        <div class="proc-step">⑤ 데이터 자산화</div>
+      </div>
+
+      <div class="scene">
+        <div class="scene-msg">"내일 비 예보로 배달 수요 증가가 예상됩니다.<br>배달앱 최상단 광고비를 20% 상향 집행할까요?"</div>
+        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <div class="syes">승인</div>
+          <div class="sno">보류</div>
+          <div class="snote">선제적 제안(Proactive) + 원클릭 즉각 실행(One-click Execution)</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:56px">
+        <div class="btn btno" onclick="gp('solution')">솔루션 자세히 보기 →</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="fi">
+      <div class="ftop">
+        <div class="fbrand">
+          <h3>더 오픈런 <span style="color:var(--orange)">AI</span></h3>
+          <p>외식업 자영업자의 경영 자율주행을 위한 AI 에이전트 플랫폼</p>
+          <a class="femail" href="mailto:openrunlabs365@gmail.com">openrunlabs365@gmail.com</a>
+        </div>
+        <div class="flinks">
+          <div class="fcol"><h5>메뉴</h5><ul>
+            <li><a href="#" onclick="gp('home')">HOME</a></li>
+            <li><a href="#" onclick="gp('about')">회사소개</a></li>
+            <li><a href="#" onclick="gp('solution')">솔루션</a></li>
+            <li><a href="#" onclick="gp('ir')">IR</a></li>
+            <li><a href="#" onclick="gp('recruit')">채용</a></li>
+          </ul></div>
+          <div class="fcol"><h5>문의</h5><ul>
+            <li><a href="mailto:openrunlabs365@gmail.com">투자 문의</a></li>
+            <li><a href="mailto:openrunlabs365@gmail.com">파트너십 문의</a></li>
+            <li><a href="mailto:openrunlabs365@gmail.com">채용 문의</a></li>
+            <li><a href="mailto:openrunlabs365@gmail.com">일반 문의</a></li>
+          </ul></div>
+          <div class="fcol"><h5>법적 정보</h5><ul>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">이용약관</a></li>
+          </ul></div>
+        </div>
+      </div>
+      <div class="fbot">
+        <p>주식회사 오픈런랩스 · 대표자 허유진 · 사업자등록번호 731-81-03963 · 인천시 연수구 인천타워대로 301, A동 2136 · ⓒ 2025 OpenRun Labs</p>
+        <div class="fslogan">Success is Lo-G</div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ████████  회사소개  ████████ -->
+<div id="page-about" class="page">
+  <div class="phero"><div class="inner">
+    <div class="eyebrow">About</div>
+    <h2>왜 이 팀이 외식업 혁신을<br>완수할 수밖에 없는가</h2>
+  </div></div>
+
+  <div class="sec"><div class="inner">
+    <div class="slabel">브랜드 철학</div>
+    <div class="qblock" style="font-size:var(--f2xl)">"Success is Lo-G"<br><span style="font-size:var(--flg);color:var(--ts);font-weight:400">성공은 운이 아니라 논리다</span></div>
+
+    <div class="div"></div>
+
+    <div class="slabel">미션 &amp; 비전</div>
+    <div class="g2" style="margin-bottom:64px">
+      <div class="card" style="border-left:4px solid var(--orange)">
+        <div class="eyebrow">Mission</div>
+        <h3 style="margin-bottom:16px">매장의 전 과정 문제를 해결해<br>가치 있는 매장을 만들도록 돕는다</h3>
+        <p>예비창업부터 운영, 성장, 폐업 방어까지 — 외식 사업자의 경영 전 과정에서 데이터 기반의 올바른 의사결정을 지원합니다.</p>
+      </div>
+      <div class="card" style="border-left:4px solid #60A5FA">
+        <div class="eyebrow" style="color:#60A5FA">Vision</div>
+        <h3 style="margin-bottom:16px">사업자 데이터를 자산화해<br>운영·유통·금융으로 확장한다</h3>
+        <p>매장 운영 데이터를 OpenRun Score로 자산화하고, 유통 최적화와 금융 서비스(대안신용평가)로 연결해 자영업 생태계 전체를 혁신합니다.</p>
+      </div>
+    </div>
+
+    <div class="slabel">팀 소개</div>
+    <div style="border-left:4px solid var(--orange);padding:22px 28px;background:var(--orange-d);border-radius:0 var(--rmd) var(--rmd) 0;margin-bottom:32px;font-size:var(--fmd)">
+      <strong>Founder-Market Fit</strong> — 현장의 페인포인트 × 데이터·금융 아키텍처. 가장 깊숙한 '현장의 언어'를 '데이터의 언어'로 번역하는 유일한 팀.
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="tav">허</div>
+        <h3>허유진</h3>
+        <div class="trole">CEO · 대표이사</div>
+        <p>외식매장 현장 실무 및 운영 총괄. 날카로운 외식업 페인포인트 정의 및 고매출 성공 로직 알고리즘화. 현장의 언어를 데이터로 번역하는 오픈런랩스의 핵심 축.</p>
+      </div>
+      <div class="team-card">
+        <div class="tav">곽</div>
+        <h3>곽중현</h3>
+        <div class="trole">CSO · 최고전략책임자</div>
+        <p>삼성금융계열사 10년 근무 및 외식 프랜차이즈 임원 출신. 데이터 아키텍처 설계, 비즈니스 모델링 및 투자 전략 총괄.</p>
+      </div>
+      <div class="team-card">
+        <div class="tav" style="font-size:16px">CTO</div>
+        <h3>CTO</h3>
+        <div class="trole">채용 예정</div>
+        <p>다이닝 코치 AI 알고리즘 개발 총괄 예정. 현재 AI 전문 개발사와 MOU 협업을 통해 초기 개발을 진행 중이며, 서비스 안정화 이후 전문 CTO를 채용합니다.</p>
+        <p class="tnote">* 초기 개발: AI 전문 개발사 MOU 기반 협업 진행 중</p>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="slabel">성장 로드맵</div>
+    <div class="rm-grid">
+      <div class="rm-card">
+        <div class="rm-year">2026</div>
+        <div class="rm-phase">Phase 1 · 초기 MVP</div>
+        <p>초기 MVP 모델 개발 및 테스트. 다이닝 로지 정식 1차 출시. MOU 파트너십 기반 실데이터 검증 및 알고리즘 고도화.</p>
+      </div>
+      <div class="rm-card">
+        <div class="rm-year">2027</div>
+        <div class="rm-phase">Phase 2 · 시장 확장</div>
+        <p>외식 사업자 10만 명 확보. B2G 공공사업 진입. 소상공인진흥공단·지자체 위탁교육으로 공신력 강화.</p>
+      </div>
+      <div class="rm-card">
+        <div class="rm-year">2028</div>
+        <div class="rm-phase">Phase 3 · 금융 확장</div>
+        <p>OpenRun Score 기반 자영업 대안 신용평가 모델 개발 및 금융사 협업. 데이터 자산의 본격적인 금융 가치화.</p>
+      </div>
+    </div>
+  </div></div>
+
+  <footer><div class="fi">
+    <div class="ftop">
+      <div class="fbrand"><h3>더 오픈런 <span style="color:var(--orange)">AI</span></h3><p>외식업 자영업자의 경영 자율주행 플랫폼</p><a class="femail" href="mailto:openrunlabs365@gmail.com">openrunlabs365@gmail.com</a></div>
+      <div class="flinks">
+        <div class="fcol"><h5>메뉴</h5><ul><li><a href="#" onclick="gp('home')">HOME</a></li><li><a href="#" onclick="gp('solution')">솔루션</a></li><li><a href="#" onclick="gp('ir')">IR</a></li><li><a href="#" onclick="gp('recruit')">채용</a></li></ul></div>
+        <div class="fcol"><h5>문의</h5><ul><li><a href="mailto:openrunlabs365@gmail.com">모든 문의</a></li></ul></div>
+      </div>
+    </div>
+    <div class="fbot"><p>주식회사 오픈런랩스 · 대표자 허유진 · 사업자등록번호 731-81-03963 · 인천시 연수구 인천타워대로 301, A동 2136 · ⓒ 2025 OpenRun Labs</p><div class="fslogan">Success is Lo-G</div></div>
+  </div></footer>
+</div>
+
+<!-- ████████  솔루션  ████████ -->
+<div id="page-solution" class="page">
+  <div class="phero"><div class="inner">
+    <div class="eyebrow">Solution</div>
+    <h2>THE OPENRUN <span style="color:var(--orange)">AI</span></h2>
+    <p class="psub" style="margin-top:16px">구독료를 내고 도구를 쓰는 것이 아니라, AI 직원을 고용하는 개념입니다.</p>
+  </div></div>
+
+  <div class="sec"><div class="inner">
+    <div class="cacc" style="margin-bottom:64px">
+      <div style="font-size:var(--fxs);color:var(--orange);font-weight:700;margin-bottom:14px;letter-spacing:1px">DINING LOGIC ENGINE 1.0</div>
+      <p style="font-size:var(--flg);line-height:1.8;color:var(--tp)">THE OPENRUN AI의 사고 로직을 지탱하는 브레인이 <strong>Dining Logic 1.0</strong>입니다. Claude Sonnet이 GPT와 다르듯, Dining Logic 1.0은 더 오픈런 AI를 구동하는 독자적 알고리즘 엔진입니다. 단순한 앱이 아닌, 사장님을 대신해 <strong>판단하고 실행하는 AI 직원</strong>입니다.</p>
+    </div>
+
+    <div class="prod-hd"><span class="lbadge lsaas">SaaS 레이어</span><span style="font-size:var(--fsm);color:var(--tm)">플랫폼 &amp; 데이터</span></div>
+    <div class="g3" style="margin-bottom:52px">
+      <div class="prod-card"><h4>통합 대시보드</h4><p>매출·리뷰·광고 효율·재고를 한 화면에서 실시간 확인. 파편화된 데이터를 하나로 통합합니다.</p></div>
+      <div class="prod-card"><h4>오픈런 스코어</h4><p>운영 데이터를 비재무 신용등급으로 자동 산출. 금융 소외 자영업자의 데이터 자산화를 실현합니다.</p></div>
+      <div class="prod-card"><h4>플랫폼 연동</h4><p>배달앱·네이버·카카오 + <span class="hi">카드매출·POS 매출 데이터</span> 자동 수집·통합.</p></div>
+    </div>
+
+    <div class="prod-hd"><span class="lbadge lagent">AI 에이전트 레이어</span><span style="font-size:var(--fsm);color:var(--tm)">자율 실행</span></div>
+    <div class="g3" style="margin-bottom:32px">
+      <div class="prod-card"><h4>자율 광고 집행</h4><p>날씨·시간·재고 데이터 기반으로 AI가 광고를 스스로 집행. 사장님 승인 한 번으로 완료됩니다.</p></div>
+      <div class="prod-card"><h4>리뷰 자동 응대</h4><p>감성 분석 후 맥락에 맞는 답글을 AI가 자동 작성. 브랜드 톤과 일관성을 유지합니다.</p></div>
+      <div class="prod-card"><h4>발주 자동 추천</h4><p>매출 예측 기반 식자재 발주량을 AI가 제안·실행. 재고 손실과 과잉 발주를 최소화합니다.</p></div>
+    </div>
+
+    <div class="scene">
+      <div class="scene-msg">"내일 비 예보로 배달 수요 증가가 예상됩니다.<br>배달앱 최상단 광고비를 20% 상향 집행할까요?"</div>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div class="syes">승인</div><div class="sno">보류</div>
+        <div class="snote">선제적 제안(Proactive) + 원클릭 즉각 실행(One-click Execution)</div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+    <div class="slabel">브랜드 아키텍처 — 플라이휠</div>
+    <p style="font-size:var(--flg);color:var(--ts);margin-bottom:32px">두뇌·실행·트렌드 3축 + 다이닝 코치가 하나의 플라이휠로 연결됩니다.</p>
+    <div class="g2" style="margin-bottom:64px">
+      <div class="arch-card"><h4>두뇌 (Brain)</h4><p>더 오픈런 AI · 로지 스캔 · 오픈런 스코어<br>데이터 진단 → 금융 자산화</p></div>
+      <div class="arch-card"><h4>실행 (Execution)</h4><p>더 오픈런 마케팅 · 다이닝 로지 · 솔루션 · 마켓<br>GEO·LSM 집행 · SaaS+AI · 컨설팅 · SCM</p></div>
+      <div class="arch-card"><h4>트렌드 (Trend)</h4><p>더 오픈런 인사이트 · 아카데미<br>커뮤니티 · Lo-G 성공 논리 전수</p></div>
+      <div class="arch-card"><h4>다이닝 코치</h4><p>현장 대면 진단 → 신뢰 형성 → 장기 월 1회 체크인<br>AI를 사람의 언어로 번역해 신뢰 완성</p></div>
+    </div>
+
+    <div class="slabel">고객 여정 6단계</div>
+    <div class="journey">
+      <div class="jstep"><div class="jdot on">01</div><div><div class="jlabel">AI</div><div class="jtitle">무료 진단 리포트 수신</div><div class="jdesc">카카오톡으로 로지 스캔 리포트 도착. "이게 뭐지?" — 호기심은 생겼지만 행동은 없음.</div></div></div>
+      <div class="jstep"><div class="jdot on">02</div><div><div class="jlabel">다이닝 코치</div><div class="jtitle">코치 첫 방문</div><div class="jdesc">리포트를 들고 매장 직접 방문. "사장님, 저 지난번에 리포트 드린 사람인데요" → 문이 열림.</div></div></div>
+      <div class="jstep"><div class="jdot">03</div><div><div class="jlabel">다이닝 코치</div><div class="jtitle">현장 공감 &amp; 신뢰 형성</div><div class="jdesc">"사장님 매장은 리뷰 응대가 문제예요" → 데이터가 현실로 인식됨. "이 사람은 내 가게를 알고 있구나."</div></div></div>
+      <div class="jstep"><div class="jdot">04</div><div><div class="jlabel">AI + 코치</div><div class="jtitle">첫 액션 함께 실행</div><div class="jdesc">코치와 함께 광고 첫 집행, 리뷰 답글, 다이닝 로지 첫 세팅. 사장님의 첫 성공 경험.</div></div></div>
+      <div class="jstep"><div class="jdot">05</div><div><div class="jlabel">AI</div><div class="jtitle">자립 운영 &amp; 구독 유지</div><div class="jdesc">사장님이 직접 대시보드 확인·발주 승인. 코치는 월 1회 체크인으로 전환. 구독 자연 유지.</div></div></div>
+      <div class="jstep"><div class="jdot">06</div><div><div class="jlabel">AI + 코치</div><div class="jtitle">오픈런 스코어 자산화</div><div class="jdesc">"사장님, 대출 한도가 늘었어요" → 장기 관계 완성. 지인 소개 시작.</div></div></div>
+    </div>
+  </div></div>
+
+  <footer><div class="fi">
+    <div class="ftop">
+      <div class="fbrand"><h3>더 오픈런 <span style="color:var(--orange)">AI</span></h3><p>외식업 자영업자의 경영 자율주행 플랫폼</p><a class="femail" href="mailto:openrunlabs365@gmail.com">openrunlabs365@gmail.com</a></div>
+      <div class="flinks"><div class="fcol"><h5>메뉴</h5><ul><li><a href="#" onclick="gp('home')">HOME</a></li><li><a href="#" onclick="gp('about')">회사소개</a></li><li><a href="#" onclick="gp('ir')">IR</a></li><li><a href="#" onclick="gp('recruit')">채용</a></li></ul></div><div class="fcol"><h5>문의</h5><ul><li><a href="mailto:openrunlabs365@gmail.com">모든 문의</a></li></ul></div></div>
+    </div>
+    <div class="fbot"><p>주식회사 오픈런랩스 · 대표자 허유진 · 사업자등록번호 731-81-03963 · 인천시 연수구 인천타워대로 301, A동 2136 · ⓒ 2025 OpenRun Labs</p><div class="fslogan">Success is Lo-G</div></div>
+  </div></footer>
+</div>
+
+<!-- ████████  IR  ████████ -->
+<div id="page-ir" class="page">
+  <div class="phero"><div class="inner">
+    <div class="eyebrow">IR · 투자자 · 정부기관 · 기술인증</div>
+    <h2>자영업 데이터를 확보해<br>금융·유통으로 확장하는<br>외식업 AX 플랫폼</h2>
+  </div></div>
+
+  <div class="sec"><div class="inner">
+
+    <div class="ir-vision">
+      <h3>핵심 투자 포인트</h3>
+      <p style="margin-top:20px">60만 외식업 자영업자의 운영 데이터를 축적해 <strong>OpenRun Score</strong>로 자산화하고, 이를 <strong>금융(대안신용평가)</strong>과 <strong>유통(SCM 최적화)</strong>으로 확장합니다. 데이터가 쌓일수록 진입 장벽이 높아지는 복리 성장 모델입니다.</p>
+      <div class="funnel-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
+        <div class="fstep">
+          <h5>Step 1 · 데이터 수집</h5>
+          <p>외식업 자영업자 60만 명의 매장 운영 데이터 축적</p>
+        </div>
+        <div class="fstep">
+          <h5>Step 2 · AI 마케팅 + 운영 OS</h5>
+          <p>AI 기반 광고 집행·리뷰 응대·발주 자동화로 운영 효율화</p>
+        </div>
+        <div class="fstep">
+          <h5>Step 3 · 자산화</h5>
+          <p>OpenRun Score — 운영 데이터를 비재무 신용자산으로 전환</p>
+        </div>
+        <div class="fstep" style="border-left:2px solid rgba(232,93,36,0.3)">
+          <h5>Step 4 · 금융·유통 확장</h5>
+          <p>OpenRun 마켓 · 금융사 · 신용평가사 협업으로 금융/유통 진입</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slabel">시장 규모 (보수적 추산)</div>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--bd);border-radius:var(--rmd);padding:16px 22px;margin-bottom:24px;font-size:var(--fxs);color:var(--ts);line-height:1.65">
+      아래 수치는 <strong style="color:var(--tp)">운영 OS(SaaS · AI 에이전트) 사업 기준</strong>의 보수적 추산입니다. 유통(OpenRun 마켓) 및 금융(OpenRun Score 기반 대안신용평가·핀테크) 영역으로 확장 시 실제 접근 가능 시장은 이보다 수 배 이상 확대됩니다.
+    </div>
+    <div class="tam-grid" style="margin-bottom:72px">
+      <div class="tam-card t">
+        <div class="tam-label">TAM · 전체 접근 가능 시장</div>
+        <div class="tam-val">약 3조 원</div>
+        <div class="tam-desc">국내 외식업 자영업자 약 70만 개소 대상 디지털 관리·마케팅·데이터 서비스 시장. 사업체당 연 평균 IT·마케팅 지출 약 430만 원 기준 산정.</div>
+      </div>
+      <div class="tam-card s">
+        <div class="tam-label">SAM · 서비스 가능 시장</div>
+        <div class="tam-val">약 6,000억 원</div>
+        <div class="tam-desc">디지털 전환 의향이 있는 외식업 자영업자 약 20만 명(전체의 약 30%) × 연 구독·서비스 지출 약 300만 원 기준 산정.</div>
+      </div>
+      <div class="tam-card o">
+        <div class="tam-label">SOM · 초기 획득 목표</div>
+        <div class="tam-val">약 150억 원</div>
+        <div class="tam-desc">3년 내 유료 전환 5만 명 × 연 30만 원 기준. MOU 파트너십 기반 CLG 퍼널 전환율 12% 적용한 보수적 산정값.</div>
+      </div>
+    </div>
+    <div style="background:rgba(232,93,36,0.06);border:1px solid rgba(232,93,36,0.2);border-radius:var(--rmd);padding:20px 26px;margin-bottom:72px;font-size:var(--fsm);color:var(--ts);line-height:1.7">
+      <strong style="color:var(--orange)">확장 시장 전망</strong> &nbsp;— 유통(식자재 SCM · PB 상품) 및 금융(대안신용평가 · 대출 연계 · 데이터 판매) 영역 진입 시, 접근 가능 시장은 운영 OS 대비 수 배 이상 확대됩니다. OpenRun Score가 축적될수록 금융·유통 파트너와의 협상력이 강화되는 구조입니다.
+    </div>
+
+    <div class="slabel">단계별 사업자 확보 계획</div>
+    <div class="sintro" style="margin-bottom:36px">
+      <h2>데이터가 쌓일수록<br>모델의 가치가 높아진다</h2>
+      <p>사업자 수가 곧 데이터 자산 — 금융·유통 확장의 기반이 됩니다.</p>
+    </div>
+    <div class="grow-grid">
+      <div class="grow-card">
+        <div class="gyear">2026 · 1단계</div>
+        <div class="gstep">MVP 출시 &amp; 검증</div>
+        <div class="gnum">5만</div>
+        <div class="gunit">외식 사업자 확보</div>
+        <div class="gdesc">초기 MVP 정식 출시. MOU 기반 실데이터 검증. 알고리즘 고도화.</div>
+      </div>
+      <div class="grow-card">
+        <div class="gyear">2027 · 2단계</div>
+        <div class="gstep">시장 확장 &amp; B2G</div>
+        <div class="gnum">10만</div>
+        <div class="gunit">외식 사업자 확보</div>
+        <div class="gdesc">B2G 공공사업 진입. 소상공인 지원사업 연계. 공신력 확보.</div>
+      </div>
+      <div class="grow-card">
+        <div class="gyear">2028 · 3단계</div>
+        <div class="gstep">금융 자산화 개시</div>
+        <div class="gnum">30만</div>
+        <div class="gunit">외식 사업자 확보</div>
+        <div class="gdesc">OpenRun Score 대안신용평가. 금융사 협업 본격화.</div>
+      </div>
+      <div class="grow-card">
+        <div class="gyear">2029 · 4단계</div>
+        <div class="gstep">데이터 생태계 완성</div>
+        <div class="gnum">50만</div>
+        <div class="gunit">외식 사업자 확보</div>
+        <div class="gdesc">유통 SCM 최적화. 금융 데이터 B2B 라이선싱 확대.</div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="slabel">기술 역량 — R&amp;D &amp; 특허</div>
+    <div class="card" style="margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:18px;margin-bottom:16px">
+        
+        <div><h4>연구개발 전담부서 설립</h4></div>
+      </div>
+      <p>다이닝 코치 AI 알고리즘의 지속적 개선 및 현장 적합성 검증을 위한 R&amp;D 전담부서 운영. MOU 파트너십 실데이터 기반 알고리즘 고도화 진행 중.</p>
+    </div>
+    <div class="pat-grid" style="margin-bottom:72px">
+      <div class="pat-card"><span class="pat-badge">특허 1</span><p>외식업 매장 운영 데이터 기반 경영 의사결정 자동화 방법</p></div>
+      <div class="pat-card"><span class="pat-badge">특허 2</span><p>비재무 데이터를 활용한 자영업자 신용평가 모델 (OpenRun Score)</p></div>
+      <div class="pat-card"><span class="pat-badge">특허 3</span><p>AI 에이전트 기반 외식업 광고 자율 집행 시스템</p></div>
+      <div class="pat-card"><span class="pat-badge">특허 4</span><p>다이닝 코치 AI 알고리즘 기반 경영 진단 및 실행 플랫폼</p></div>
+    </div>
+
+    <div class="slabel">정부기관 · 소상공인 연계</div>
+    <div style="border-left:4px solid var(--orange);padding:22px 28px;background:var(--orange-d);border-radius:0 var(--rmd) var(--rmd) 0;margin-bottom:28px;font-size:var(--fmd)">
+      "소상공인 폐업률을 데이터로 방어하는 지능형 경영 안전망"
+    </div>
+    <div class="g2" style="margin-bottom:72px">
+      <div class="card"><h4>B2G 위탁교육</h4><p style="margin-top:12px">소상공인진흥공단·지자체 위탁교육 제안. 공공 섹터 진입으로 플랫폼 공신력을 확보합니다.</p></div>
+      <div class="card"><h4>MOU 파트너십 확장</h4><p style="margin-top:12px">실데이터 공동 수집 → 알고리즘 검증 → 유료 전환 확장 3단계 구조.</p></div>
+    </div>
+
+    <!-- REVENUE MODEL (moved from Solution) -->
+    <div class="slabel">수익 모델 — 멀티 스트림 구조</div>
+    <p style="font-size:var(--flg);color:var(--ts);margin-bottom:32px">데이터가 쌓일수록 성장하는 복리형 수익 구조</p>
+    <div class="rev-grid" style="margin-bottom:72px">
+      <div class="rev-card"><div class="rnum">①</div><div class="rtitle">교육·컨설팅</div><div class="rsub">아카데미 강의료 · 코칭 수수료 · 정부 위탁교육</div><div class="rnote">초기 현금 확보</div></div>
+      <div class="rev-card"><div class="rnum">②</div><div class="rtitle">마케팅 대행</div><div class="rsub">GEO·LSM 수수료 + 성과 인센티브</div><div class="rnote">월 정액 + 성과</div></div>
+      <div class="rev-card"><div class="rnum">③</div><div class="rtitle">SaaS+AI</div><div class="rsub">다이닝 로지 구독료 + AI 과금</div><div class="rnote">안정적 ARR</div></div>
+      <div class="rev-card"><div class="rnum">④</div><div class="rtitle">유통·물류</div><div class="rsub">식자재 SCM 마진 · PB 로열티</div><div class="rnote">규모 성장</div></div>
+      <div class="rev-card"><div class="rnum">⑤</div><div class="rtitle">핀테크·데이터</div><div class="rsub">OpenRun Score 라이선싱 · 금융 연계</div><div class="rnote">고부가 IP 자산</div></div>
+    </div>
+
+    <div class="slabel">문의 &amp; 자료 요청</div>
+    <div class="ircta">
+      <div class="ircta-card bl">
+        <h4>투자 문의</h4>
+        <p>IR 자료 요청 및 투자 미팅 신청은 이메일로 진행합니다.</p>
+        <a class="btn btno" href="mailto:openrunlabs365@gmail.com" style="font-size:var(--fsm)">문의하기</a>
+      </div>
+      <div class="ircta-card gr">
+        <h4>정부·인증기관 문의</h4>
+        <p>신보·기보·중진공 등 정책금융 및 지원사업 연계 문의.</p>
+        <a class="btn btno" href="mailto:openrunlabs365@gmail.com" style="font-size:var(--fsm)">문의하기</a>
+      </div>
+    </div>
+  </div></div>
+
+  <footer><div class="fi">
+    <div class="ftop">
+      <div class="fbrand"><h3>더 오픈런 <span style="color:var(--orange)">AI</span></h3><p>외식업 자영업자의 경영 자율주행 플랫폼</p><a class="femail" href="mailto:openrunlabs365@gmail.com">openrunlabs365@gmail.com</a></div>
+      <div class="flinks"><div class="fcol"><h5>메뉴</h5><ul><li><a href="#" onclick="gp('home')">HOME</a></li><li><a href="#" onclick="gp('about')">회사소개</a></li><li><a href="#" onclick="gp('solution')">솔루션</a></li><li><a href="#" onclick="gp('recruit')">채용</a></li></ul></div><div class="fcol"><h5>문의</h5><ul><li><a href="mailto:openrunlabs365@gmail.com">모든 문의</a></li></ul></div></div>
+    </div>
+    <div class="fbot"><p>주식회사 오픈런랩스 · 대표자 허유진 · 사업자등록번호 731-81-03963 · 인천시 연수구 인천타워대로 301, A동 2136 · ⓒ 2025 OpenRun Labs</p><div class="fslogan">Success is Lo-G</div></div>
+  </div></footer>
+</div>
+
+<!-- ████████  채용  ████████ -->
+<div id="page-recruit" class="page">
+  <div class="phero"><div class="inner">
+    <div class="eyebrow">Careers</div>
+    <h2>회사와 성과를 나누고,<br>함께 성장할 인재를 찾습니다</h2>
+    <p class="psub" style="margin-top:16px">장사의 직관을 데이터 자산으로 설계하라. 우리는 외식업 AX의 표준이다.</p>
+  </div></div>
+
+  <div class="sec"><div class="inner">
+
+    <!-- PHILOSOPHY -->
+    <div class="phil">
+      
+      <h2>성과를 공평하게 나눠<br>함께 성장하는 기업</h2>
+      <p style="margin-top:20px">오픈런랩스는 구성원의 기여가 회사의 성장으로, 회사의 성장이 구성원의 보상으로 직결되는 구조를 만듭니다. 우리는 착취하지 않습니다. 함께 만든 가치는 함께 나눕니다.</p>
+    </div>
+
+    <div class="slabel" style="margin-top:72px">인재상</div>
+    <div class="tal-grid" style="margin-bottom:72px">
+      <div class="tal-card">
+        <div class="tal-emoji">📈</div>
+        <h3>Data First</h3>
+        <p>'데이터에 따르면'이 먼저인 분. 모든 제안의 근거를 논리와 수치에 두는 분. '제 생각에는요'보다 숫자로 설득하는 분.</p>
+      </div>
+      <div class="tal-card">
+        <div class="tal-emoji">⚙️</div>
+        <h3>System Thinker</h3>
+        <p>'이 로직으로 바꿉시다'가 먼저인 분. 파편화된 자영업의 결핍을 하나의 시스템으로 연결하는 통찰력을 가진 분.</p>
+      </div>
+      <div class="tal-card">
+        <div class="tal-emoji">🤝</div>
+        <h3>Dining Coach DNA</h3>
+        <p>사장님의 언어로 데이터를 설명하는 분. AI와 사람 사이 마지막 1마일을 완성하는 분. 현장에서 신뢰를 쌓는 분.</p>
+      </div>
+      <div class="tal-card">
+        <div class="tal-emoji">🔥</div>
+        <h3>Mission Driven</h3>
+        <p>한 사장님의 인생과 금융 가치를 바꿀 수 있다는 무게감으로 일하는 분. 단순한 일이 아닌 사명으로 접근하는 분.</p>
+      </div>
+    </div>
+
+    <div class="slabel">채용 포지션</div>
+    <div class="job-grid" style="margin-bottom:72px">
+      <div class="job-card"><div><h4>AI 프로덕트 매니저</h4><p>다이닝 로지 서비스 기획·운영</p></div><div class="jarrow">→</div></div>
+      <div class="job-card"><div><h4>데이터·ML 엔지니어</h4><p>다이닝 코치 AI 알고리즘 개발</p></div><div class="jarrow">→</div></div>
+      <div class="job-card"><div><h4>다이닝 코치</h4><p>현장 영업 + 대면 컨설팅</p></div><div class="jarrow">→</div></div>
+      <div class="job-card"><div><h4>퍼포먼스 마케터</h4><p>GEO·LSM 광고 집행</p></div><div class="jarrow">→</div></div>
+    </div>
+
+    <div class="slabel">채용 프로세스</div>
+    <div class="proc-row">
+      <div class="proc-step">서류 접수</div><div class="proc-arr">→</div>
+      <div class="proc-step">대표이사 커피챗</div><div class="proc-arr">→</div>
+      <div class="proc-step">과제 수행</div><div class="proc-arr">→</div>
+      <div class="proc-step">대표이사 2차 커피챗</div><div class="proc-arr">→</div>
+      <div class="proc-step">최종 합류</div>
+    </div>
+
+    <div class="cacc" style="margin-top:48px;text-align:center">
+      
+      <p style="font-size:var(--flg);line-height:1.8;margin-bottom:32px">AI 기술과 다이닝 코치가 만나 외식업의 표준 OS를 만드는 여정.<br>함께 성장할 팀원을 기다립니다.</p>
+      <div class="brow" style="justify-content:center">
+        <a class="btn btnp" href="https://notion.so" target="_blank" rel="noopener">좀 더 알아보기 →</a>
+        <a class="btn btno" href="mailto:openrunlabs365@gmail.com">채용 문의 메일 보내기</a>
+      </div>
+      <p style="font-size:var(--fxs);color:var(--tm);margin-top:20px">채용 상세 내용은 노션 페이지 및 이메일로 확인하실 수 있습니다.</p>
+    </div>
+  </div></div>
+
+  <footer><div class="fi">
+    <div class="ftop">
+      <div class="fbrand"><h3>더 오픈런 <span style="color:var(--orange)">AI</span></h3><p>외식업 자영업자의 경영 자율주행 플랫폼</p><a class="femail" href="mailto:openrunlabs365@gmail.com">openrunlabs365@gmail.com</a></div>
+      <div class="flinks"><div class="fcol"><h5>메뉴</h5><ul><li><a href="#" onclick="gp('home')">HOME</a></li><li><a href="#" onclick="gp('about')">회사소개</a></li><li><a href="#" onclick="gp('solution')">솔루션</a></li><li><a href="#" onclick="gp('ir')">IR</a></li></ul></div><div class="fcol"><h5>채용 문의</h5><ul><li><a href="mailto:openrunlabs365@gmail.com">openrunlabs365@gmail.com</a></li></ul></div></div>
+    </div>
+    <div class="fbot"><p>주식회사 오픈런랩스 · 대표자 허유진 · 사업자등록번호 731-81-03963 · 인천시 연수구 인천타워대로 301, A동 2136 · ⓒ 2025 OpenRun Labs</p><div class="fslogan">Success is Lo-G</div></div>
+  </div></footer>
+</div>
+
+<script>
+const order=['home','about','solution','ir','recruit'];
+function gp(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nlink').forEach(l=>l.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const i=order.indexOf(id);
+  const ls=document.querySelectorAll('.nlink');
+  if(i>=0&&ls[i])ls[i].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tm(){document.getElementById('mn').classList.toggle('open')}
+function cm(){document.getElementById('mn').classList.remove('open')}
+document.addEventListener('click',function(e){
+  const mn=document.getElementById('mn');
+  const h=document.getElementById('ham');
+  if(mn&&h&&!mn.contains(e.target)&&!h.contains(e.target))mn.classList.remove('open');
+});
+</script>
+</body>
+</html>
